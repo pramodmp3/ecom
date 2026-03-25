@@ -1,0 +1,638 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Sign Up | Stackly Store</title>
+    <style>
+      :root {
+        --primary-purple: #5f259f;
+        --secondary-blue: #2563eb;
+        --hover-blue: #e0e7ff;
+        --bg-white: #ffffff;
+        --bg-light: #f9f9f9;
+        --text-dark: #333333;
+        --text-gray: #606060;
+        --border-color: #e5e7eb;
+        --header-h: 60px;
+        --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      }
+
+      * {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+        font-family: "Inter", "Segoe UI", Roboto, sans-serif;
+      }
+
+      body {
+        background-color: var(--bg-light);
+        color: var(--text-dark);
+        min-height: 100vh;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 15px;
+      }
+
+      /* Split Screen Container */
+      .stklyecom-signup-container {
+        display: flex;
+        width: 100%;
+        max-width: 1100px;
+        min-height: 750px;
+        background: var(--bg-white);
+        border-radius: 16px;
+        overflow: hidden;
+        box-shadow: 0 20px 40px rgba(0, 0, 0, 0.08);
+        animation: stkly-slideIn 0.8s ease-out;
+      }
+
+      /* Left Panel - Marketing */
+      .stklyecom-left-panel {
+        flex: 1;
+        background: linear-gradient(
+          135deg,
+          var(--primary-purple) 0%,
+          #431a74 100%
+        );
+        padding: 60px 40px;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        color: white;
+        position: relative;
+      }
+
+      .stklyecom-brand {
+        font-size: 1.5rem;
+        font-weight: 800;
+        letter-spacing: -0.5px;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+      }
+
+      .stklyecom-brand-icon {
+        width: 32px;
+        height: 32px;
+        background: white;
+        border-radius: 6px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: var(--primary-purple);
+        font-weight: 900;
+      }
+
+      .stklyecom-marketing-content h1 {
+        font-size: 2.2rem;
+        line-height: 1.2;
+        margin-bottom: 20px;
+        font-weight: 700;
+      }
+
+      .stklyecom-marketing-content p {
+        font-size: 1.05rem;
+        line-height: 1.6;
+        opacity: 0.9;
+        margin-bottom: 30px;
+      }
+
+      .stklyecom-back-home {
+        align-self: flex-start;
+        padding: 10px 24px;
+        background: rgba(255, 255, 255, 0.1);
+        border: 1px solid rgba(255, 255, 255, 0.2);
+        color: white;
+        text-decoration: none;
+        border-radius: 6px;
+        font-size: 0.9rem;
+        font-weight: 600;
+        transition: var(--transition);
+      }
+
+      .stklyecom-back-home:hover {
+        background: white;
+        color: var(--primary-purple);
+      }
+
+      /* Right Panel - Form */
+      .stklyecom-right-panel {
+        flex: 1.2;
+        padding: 50px;
+        background: var(--bg-white);
+        overflow-y: auto;
+        animation: stkly-fadeIn 1s ease-out;
+      }
+
+      .stklyecom-form-header {
+        margin-bottom: 30px;
+      }
+
+      .stklyecom-form-header h2 {
+        font-size: 1.75rem;
+        font-weight: 700;
+        color: var(--text-dark);
+        margin-bottom: 8px;
+      }
+
+      .stklyecom-form-header p {
+        color: var(--text-gray);
+        font-size: 0.95rem;
+      }
+
+      /* Form Layout Grid */
+      .stklyecom-form-grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 15px;
+      }
+
+      .stklyecom-form-group {
+        margin-bottom: 18px;
+      }
+
+      .stklyecom-form-group.full-width {
+        grid-column: span 2;
+      }
+
+      .stklyecom-label {
+        display: block;
+        margin-bottom: 8px;
+        font-size: 0.8rem;
+        font-weight: 700;
+        color: var(--text-dark);
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+      }
+
+      .stklyecom-input,
+      .stklyecom-select {
+        width: 100%;
+        padding: 12px 16px;
+        border: 1px solid var(--border-color);
+        border-radius: 8px;
+        font-size: 0.95rem;
+        color: var(--text-dark);
+        background: var(--bg-white);
+        transition: var(--transition);
+        outline: none;
+      }
+
+      .stklyecom-input:focus,
+      .stklyecom-select:focus {
+        border-color: var(--primary-purple);
+        box-shadow: 0 0 0 4px rgba(95, 37, 159, 0.08);
+        transform: translateY(-1px);
+      }
+
+      /* Checkbox Styling */
+      .stklyecom-checkbox-group {
+        display: flex;
+        align-items: flex-start;
+        gap: 10px;
+        margin: 10px 0 25px;
+        font-size: 0.9rem;
+        color: var(--text-gray);
+        cursor: pointer;
+      }
+
+      .stklyecom-checkbox-group input {
+        margin-top: 3px;
+      }
+
+      /* Action Button */
+      .stklyecom-signup-btn {
+        width: 100%;
+        height: 50px;
+        background: var(--primary-purple);
+        color: white;
+        border: none;
+        border-radius: 6px;
+        font-size: 1rem;
+        font-weight: 700;
+        cursor: pointer;
+        position: relative;
+        overflow: hidden;
+        z-index: 1;
+        transition: var(--transition);
+      }
+
+      .stklyecom-signup-btn::before {
+        content: "";
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        width: 100%;
+        height: 0;
+        background: var(--secondary-blue);
+        transition: height 0.4s ease;
+        z-index: -1;
+      }
+
+      .stklyecom-signup-btn:hover::before {
+        height: 100%;
+      }
+
+      /* Social Section */
+      .stklyecom-divider {
+        margin: 30px 0 20px;
+        text-align: center;
+        position: relative;
+      }
+
+      .stklyecom-divider::before {
+        content: "";
+        position: absolute;
+        top: 50%;
+        left: 0;
+        width: 100%;
+        height: 1px;
+        background: var(--border-color);
+      }
+
+      .stklyecom-divider span {
+        position: relative;
+        z-index: 2;
+        background: white;
+        padding: 0 15px;
+        color: var(--text-gray);
+        font-size: 0.8rem;
+        text-transform: uppercase;
+        font-weight: 600;
+      }
+
+      .stklyecom-social-grid {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 12px;
+      }
+
+      .stklyecom-social-btn {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 8px;
+        padding: 10px;
+        border: 1px solid var(--border-color);
+        background: white;
+        border-radius: 8px;
+        cursor: pointer;
+        transition: var(--transition);
+        font-weight: 500;
+        font-size: 0.85rem;
+      }
+
+      .stklyecom-social-btn:hover {
+        background: var(--hover-blue);
+      }
+
+      .stklyecom-social-btn svg {
+        width: 18px;
+        height: 18px;
+      }
+
+      .stklyecom-footer-text {
+        margin-top: 30px;
+        text-align: center;
+        font-size: 0.95rem;
+        color: var(--text-gray);
+      }
+
+      .stklyecom-footer-text a {
+        color: var(--primary-purple);
+        text-decoration: none;
+        font-weight: 700;
+      }
+
+      /* Custom Modal for Validation Errors */
+      .stklyecom-alert {
+        display: none;
+        position: fixed;
+        top: 20px;
+        right: 20px;
+        padding: 15px 25px;
+        background: #ef4444;
+        color: white;
+        border-radius: 8px;
+        box-shadow: 0 10px 15px rgba(0, 0, 0, 0.1);
+        z-index: 1000;
+        animation: stkly-slideDown 0.3s ease-out;
+      }
+
+      /* Animations */
+      @keyframes stkly-slideIn {
+        from {
+          opacity: 0;
+          transform: translateX(30px);
+        }
+        to {
+          opacity: 1;
+          transform: translateX(0);
+        }
+      }
+
+      @keyframes stkly-fadeIn {
+        from {
+          opacity: 0;
+        }
+        to {
+          opacity: 1;
+        }
+      }
+
+      @keyframes stkly-slideDown {
+        from {
+          transform: translateY(-20px);
+          opacity: 0;
+        }
+        to {
+          transform: translateY(0);
+          opacity: 1;
+        }
+      }
+
+      /* Mobile Responsive */
+      @media (max-width: 850px) {
+        body {
+          padding: 10px;
+          align-items: flex-start;
+        }
+        .stklyecom-signup-container {
+          flex-direction: column;
+          max-width: 500px;
+          margin-top: 20px;
+        }
+        .stklyecom-left-panel {
+          padding: 40px 24px;
+          text-align: center;
+          align-items: center;
+        }
+        .stklyecom-back-home {
+          display: none;
+        }
+        .stklyecom-marketing-content h1 {
+          font-size: 1.8rem;
+        }
+        .stklyecom-right-panel {
+          padding: 35px 20px;
+        }
+        .stklyecom-form-grid {
+          grid-template-columns: 1fr;
+        }
+        .stklyecom-form-group {
+          grid-column: span 1 !important;
+        }
+        .stklyecom-social-grid {
+          grid-template-columns: 1fr;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div id="errorAlert" class="stklyecom-alert"></div>
+
+    <div class="stklyecom-signup-container">
+      <!-- Left Panel -->
+      <aside class="stklyecom-left-panel">
+        <div class="stklyecom-brand">
+          <div class="stklyecom-brand-icon">S</div>
+          Stackly Store
+        </div>
+
+        <div class="stklyecom-marketing-content">
+          <h1>Start selling or <br />shopping today</h1>
+          <p>
+            Create your account to explore products and manage your store
+            efficiently.
+          </p>
+        </div>
+
+        <a href="./index.html" class="stklyecom-back-home">Back to Home</a>
+      </aside>
+
+      <!-- Right Panel -->
+      <main class="stklyecom-right-panel">
+        <div class="stklyecom-form-header">
+          <h2>Create Account</h2>
+          <p>Fill in the details below to get started.</p>
+        </div>
+
+        <form id="signupForm" autocomplete="off">
+          <div class="stklyecom-form-grid">
+            <div class="stklyecom-form-group">
+              <label class="stklyecom-label" for="fullName">Full Name</label>
+              <input
+                type="text"
+                id="fullName"
+                class="stklyecom-input"
+                placeholder="John Doe"
+                required
+              />
+            </div>
+
+            <div class="stklyecom-form-group">
+              <label class="stklyecom-label" for="userRole">Role</label>
+              <select id="userRole" class="stklyecom-select" required>
+                <option value="Customer">Customer</option>
+                <option value="Seller">Seller</option>
+              </select>
+            </div>
+
+            <div class="stklyecom-form-group">
+              <label class="stklyecom-label" for="email">Email Address</label>
+              <input
+                type="email"
+                id="email"
+                class="stklyecom-input"
+                placeholder="john@example.com"
+                required
+              />
+            </div>
+
+            <div class="stklyecom-form-group">
+              <label class="stklyecom-label" for="phone">Phone Number</label>
+              <input
+                type="number"
+                id="phone"
+                class="stklyecom-input"
+                placeholder="+1 (555) 000-0000"
+                required
+              />
+            </div>
+
+            <div class="stklyecom-form-group">
+              <label class="stklyecom-label" for="password">Password</label>
+              <input
+                type="password"
+                id="password"
+                class="stklyecom-input"
+                placeholder="••••••••"
+                required
+              />
+            </div>
+
+            <div class="stklyecom-form-group">
+              <label class="stklyecom-label" for="confirmPassword"
+                >Confirm Password</label
+              >
+              <input
+                type="password"
+                id="confirmPassword"
+                class="stklyecom-input"
+                placeholder="••••••••"
+                required
+              />
+            </div>
+          </div>
+
+          <label class="stklyecom-checkbox-group">
+            <input type="checkbox" id="termsCheck" />
+            <span
+              >I agree to the
+              <a
+                href="./404.html"
+                style="color: var(--primary-purple); font-weight: 600"
+                >Terms & Conditions</a
+              >
+              and Privacy Policy.</span
+            >
+          </label>
+
+          <button type="submit" class="stklyecom-signup-btn">
+            Create Account
+          </button>
+        </form>
+
+        <div class="stklyecom-divider">
+          <span>Or sign up with</span>
+        </div>
+
+        <div class="stklyecom-social-grid">
+          <button
+            class="stklyecom-social-btn"
+            onclick="window.location.href = './404.html'"
+          >
+            <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+              <path
+                d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"
+                fill="#4285F4"
+              />
+              <path
+                d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"
+                fill="#34A853"
+              />
+              <path
+                d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l3.66-2.84z"
+                fill="#FBBC05"
+              />
+              <path
+                d="M12 5.38c1.62 0 3.06.56 4.21 1.66l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"
+                fill="#EA4335"
+              />
+            </svg>
+            Google
+          </button>
+          <button
+            class="stklyecom-social-btn"
+            onclick="window.location.href = './404.html'"
+          >
+            <svg
+              fill="#1877F2"
+              viewBox="0 0 24 24"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"
+              />
+            </svg>
+            Facebook
+          </button>
+          <button
+            class="stklyecom-social-btn"
+            onclick="window.location.href = './404.html'"
+          >
+            <svg viewBox="0 0 24 24" fill="currentColor">
+              <path
+                d="M17.05 20.28c-.96.95-2.12 1.45-3.32 1.45-1.12 0-2.1-.34-2.92-.72-.75-.35-1.52-.71-2.45-.71-.96 0-1.8.36-2.58.72-.8.37-1.8.84-3.03.84-1.22 0-2.44-.51-3.45-1.45C-1.15 17.15-1.15 11.2 2.37 7.7c1.35-1.34 2.85-2.02 4.45-2.02.85 0 1.63.18 2.3.4.63.2 1.25.43 1.8.43.5 0 1.1-.22 1.78-.44.82-.26 1.75-.5 2.76-.5 1.55 0 3 .65 4.3 1.94-3.23 1.82-2.72 6.07.52 7.55-.7 1.92-1.85 3.75-3.28 5.22zM12.03 5.12c-.1-.9 1.15-3.05 3.03-4.12.1-.05.2-.1.3-.1.1 0 .22.05.28.15.12.2.3 1 0 2.2-.28 1.1-1.35 3.1-3.22 4-.1 0-.2.1-.28.1-.1 0-.2-.05-.28-.15-.05-.1-.1-.2-.1-.3z"
+              />
+            </svg>
+            Apple
+          </button>
+          <button
+            class="stklyecom-social-btn"
+            onclick="window.location.href = './404.html'"
+          >
+            <svg viewBox="0 0 24 24" fill="#0077B5">
+              <path
+                d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z"
+              />
+            </svg>
+            LinkedIn
+          </button>
+        </div>
+
+        <p class="stklyecom-footer-text">
+          Already have an account? <a href="./login.html">Login</a>
+        </p>
+      </main>
+    </div>
+
+    <script>
+      const signupForm = document.getElementById("signupForm");
+      const alertBox = document.getElementById("errorAlert");
+
+      function showAlert(message) {
+        alertBox.textContent = message;
+        alertBox.style.display = "block";
+        setTimeout(() => {
+          alertBox.style.display = "none";
+        }, 4000);
+      }
+
+      signupForm.addEventListener("submit", function (e) {
+        e.preventDefault();
+
+        // Form Data
+        const name = document.getElementById("fullName").value;
+        const role = document.getElementById("userRole").value;
+        const email = document.getElementById("email").value;
+        const pass = document.getElementById("password").value;
+        const confirmPass = document.getElementById("confirmPassword").value;
+        const termsChecked = document.getElementById("termsCheck").checked;
+
+        // 🎯 CORE VALIDATION
+        if (pass !== confirmPass) {
+          showAlert("Passwords do not match!");
+          return;
+        }
+
+        if (!termsChecked) {
+          showAlert("You must agree to the Terms & Conditions.");
+          return;
+        }
+
+        // 🎯 STORE USER
+        const userData = {
+          name: name,
+          email: email,
+          role: role,
+        };
+
+        localStorage.setItem("user", JSON.stringify(userData));
+
+        // Visual feedback
+        const btn = document.querySelector(".stklyecom-signup-btn");
+        btn.textContent = "Creating Account...";
+        btn.style.opacity = "0.7";
+        btn.disabled = true;
+
+        // 🎯 REDIRECT AFTER SIGNUP
+        setTimeout(() => {
+          window.location.href = "./login.html";
+        }, 1000);
+      });
+    </script>
+  </body>
+</html>

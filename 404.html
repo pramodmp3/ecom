@@ -1,0 +1,353 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Page Not Found | NexStore</title>
+    <!-- Google Fonts: Inter -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      :root {
+        --primary-purple: #5f259f;
+        --secondary-blue: #2563eb;
+        --bg-white: #ffffff;
+        --bg-light: #f9f9f9;
+        --text-dark: #333333;
+        --text-gray: #606060;
+        --border-color: #e5e7eb;
+        --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      }
+
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      body {
+        font-family: "Inter", sans-serif;
+        background: linear-gradient(
+          180deg,
+          var(--bg-white) 0%,
+          var(--bg-light) 100%
+        );
+        color: var(--text-dark);
+        min-height: 100vh;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        overflow-x: hidden;
+      }
+
+      .container {
+        width: 100%;
+        max-width: 600px;
+        padding: 40px 24px;
+        text-align: center;
+        animation: fadeIn 0.8s ease-out;
+      }
+
+      @keyframes fadeIn {
+        from {
+          opacity: 0;
+          transform: translateY(20px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+
+      /* Logo Styling */
+      .logo-container {
+        margin-bottom: 20px;
+      }
+
+      .logo-img {
+        width: 120px;
+        height: auto;
+        transition: var(--transition);
+      }
+
+      /* 404 Typography */
+      .error-code {
+        font-size: clamp(80px, 20vw, 150px);
+        font-weight: 800;
+        color: var(--primary-purple);
+        line-height: 1;
+        margin-bottom: 10px;
+        letter-spacing: -4px;
+      }
+
+      .error-heading {
+        font-size: 24px;
+        font-weight: 700;
+        margin-bottom: 12px;
+        color: var(--text-dark);
+      }
+
+      .error-description {
+        font-size: 16px;
+        color: var(--text-gray);
+        max-width: 420px;
+        margin: 0 auto 32px;
+        line-height: 1.6;
+      }
+
+      /* Search Box */
+      .search-container {
+        max-width: 400px;
+        margin: 0 auto 32px;
+        position: relative;
+      }
+
+      .search-input {
+        width: 100%;
+        padding: 14px 20px;
+        border-radius: 12px;
+        border: 1px solid var(--border-color);
+        background: white;
+        font-family: inherit;
+        font-size: 15px;
+        transition: var(--transition);
+        outline: none;
+      }
+
+      .search-input:focus {
+        border-color: var(--primary-purple);
+        box-shadow: 0 0 0 4px rgba(95, 37, 159, 0.1);
+      }
+
+      /* Buttons */
+      .button-group {
+        display: flex;
+        flex-direction: column;
+        gap: 12px;
+        margin-bottom: 40px;
+      }
+
+      .btn {
+        padding: 14px 24px;
+        border-radius: 8px;
+        font-weight: 600;
+        font-size: 15px;
+        text-decoration: none;
+        transition: var(--transition);
+        cursor: pointer;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+      }
+
+      .btn:hover {
+        transform: translateY(-2px);
+      }
+
+      .btn-primary {
+        background: var(--primary-purple);
+        color: white;
+        box-shadow: 0 4px 12px rgba(95, 37, 159, 0.2);
+      }
+
+      .btn-primary:hover {
+        background: #4a1d7d;
+        box-shadow: 0 6px 16px rgba(95, 37, 159, 0.3);
+      }
+
+      .btn-secondary {
+        border: 1.5px solid var(--primary-purple);
+        color: var(--primary-purple);
+      }
+
+      .btn-secondary:hover {
+        background: rgba(95, 37, 159, 0.04);
+      }
+
+      /* Quick Links Pills */
+      .quick-links {
+        margin-bottom: 40px;
+      }
+
+      .quick-links-title {
+        font-size: 13px;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+        color: var(--text-gray);
+        margin-bottom: 16px;
+        font-weight: 600;
+      }
+
+      .pills-container {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: 8px;
+      }
+
+      .pill {
+        padding: 6px 16px;
+        background: white;
+        border: 1px solid var(--border-color);
+        border-radius: 100px;
+        font-size: 13px;
+        color: var(--text-dark);
+        text-decoration: none;
+        transition: var(--transition);
+      }
+
+      .pill:hover {
+        border-color: var(--primary-purple);
+        color: var(--primary-purple);
+        background: rgba(95, 37, 159, 0.02);
+      }
+
+      /* Social Icons */
+      .social-links {
+        display: flex;
+        justify-content: center;
+        gap: 16px;
+      }
+
+      .social-icon {
+        width: 44px;
+        height: 44px;
+        border-radius: 50%;
+        background: white;
+        border: 1px solid var(--border-color);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: var(--text-dark);
+        transition: var(--transition);
+        text-decoration: none;
+      }
+
+      .social-icon:hover {
+        color: white;
+        background: var(--primary-purple);
+        border-color: var(--primary-purple);
+        transform: translateY(-3px);
+        box-shadow: 0 4px 10px rgba(95, 37, 159, 0.2);
+      }
+
+      .social-icon svg {
+        width: 20px;
+        height: 20px;
+        fill: currentColor;
+      }
+
+      /* Responsive Breakpoints */
+      @media (min-width: 640px) {
+        .logo-img {
+          width: 160px;
+        }
+        .error-heading {
+          font-size: 32px;
+        }
+        .button-group {
+          flex-direction: row;
+          justify-content: center;
+        }
+        .btn {
+          min-width: 180px;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <!-- Logo -->
+      <div class="logo-container">
+        <a href="./index.html">
+          <img
+            src="./assets/logo.webp"
+            alt="NexStore"
+            class="logo-img"
+            onerror="
+              this.src =
+                'https://placehold.co/160x50/5f259f/ffffff?text=NexStore'
+            "
+          />
+        </a>
+      </div>
+
+      <!-- 404 Text -->
+      <div class="error-code">404</div>
+      <h1 class="error-heading">Page Not Found</h1>
+      <p class="error-description">
+        Sorry, the page you are looking for doesn't exist or has been moved.
+        Maybe a search or our popular links can help?
+      </p>
+
+      <!-- Optional Search -->
+      <div class="search-container">
+        <form action="/search" method="GET">
+          <input
+            type="text"
+            name="q"
+            class="search-input"
+            placeholder="Search for products, brands or categories..."
+          />
+        </form>
+      </div>
+
+      <!-- Action Buttons -->
+      <div class="button-group">
+        <a href="./index.html" class="btn btn-primary">Go to Home</a>
+        <a href="./login.html" class="btn btn-secondary">LOGIN NOW</a>
+      </div>
+
+      <!-- Quick Links -->
+      <div class="quick-links">
+        <div class="quick-links-title">Popular Categories</div>
+        <div class="pills-container">
+          <a href="./electronics.html" class="pill">Electronics</a>
+          <a href="./fashion.html" class="pill">Fashion</a>
+          <a href="./homeliving.html" class="pill">Home Living</a>
+          <a href="./kids.html" class="pill">Kids & Baby</a>
+        </div>
+      </div>
+
+      <!-- Social Links -->
+      <div class="social-links">
+        <!-- Facebook -->
+        <a href="./404.html" class="social-icon" aria-label="Facebook">
+          <svg viewBox="0 0 24 24">
+            <path
+              d="M22 12c0-5.52-4.48-10-10-10S2 6.48 2 12c0 4.84 3.44 8.87 8 9.8V15H8v-3h2V9.5C10 7.57 11.57 6 13.5 6H16v3h-2c-.55 0-1 .45-1 1V12h3l-.5 3H13v6.8c4.56-.93 8-4.96 8-9.8z"
+            />
+          </svg>
+        </a>
+        <!-- Instagram -->
+        <a href="./404.html" class="social-icon" aria-label="Instagram">
+          <svg viewBox="0 0 24 24">
+            <path
+              d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zM12 0C8.741 0 8.333.014 7.053.072 2.695.272.273 2.69.073 7.052.014 8.333 0 8.741 0 12c0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.668-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98C15.668.014 15.259 0 12 0zm0 5.838a6.162 6.162 0 100 12.324 6.162 6.162 0 000-12.324zM12 16a4 4 0 110-8 4 4 0 010 8zm6.406-11.845a1.44 1.44 0 100 2.881 1.44 1.44 0 000-2.881z"
+            />
+          </svg>
+        </a>
+        <!-- X (Twitter) -->
+        <a href="./404.html" class="social-icon" aria-label="X">
+          <svg viewBox="0 0 24 24">
+            <path
+              d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"
+            />
+          </svg>
+        </a>
+        <!-- YouTube -->
+        <a href="./404.html" class="social-icon" aria-label="YouTube">
+          <svg viewBox="0 0 24 24">
+            <path
+              d="M23.498 6.186a3.016 3.016 0 00-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 00.502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 002.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 002.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"
+            />
+          </svg>
+        </a>
+      </div>
+    </div>
+  </body>
+</html>

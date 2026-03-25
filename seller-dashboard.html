@@ -1,0 +1,1492 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>StklySell | Seller Dashboard</title>
+    <style>
+      :root {
+        --primary-purple: #5f259f;
+        --secondary-blue: #2563eb;
+        --hover-blue: #e0e7ff;
+        --bg-white: #ffffff;
+        --bg-light: #f9f9f9;
+        --text-dark: #333333;
+        --text-gray: #606060;
+        --border-color: #e5e7eb;
+        --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        --sidebar-width: 260px;
+        --topbar-height: 70px;
+        --shadow:
+          0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+      }
+
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+        font-family:
+          "Inter",
+          -apple-system,
+          BlinkMacSystemFont,
+          "Segoe UI",
+          Roboto,
+          sans-serif;
+      }
+      html,
+      body {
+        width: 100%;
+        overflow-x: hidden;
+      }
+      body {
+        background-color: var(--bg-light);
+        color: var(--text-dark);
+        overflow-x: hidden;
+        line-height: 1.5;
+      }
+
+      /* --- LAYOUT STRUCTURE --- */
+      .stklysell-wrapper {
+        display: flex;
+        min-height: 100vh;
+        width: 100%;
+      }
+
+      /* --- SIDEBAR --- */
+      .stklysell-sidebar {
+        width: var(--sidebar-width);
+        background: var(--bg-white);
+        border-right: 1px solid var(--border-color);
+        height: 100vh;
+        position: fixed;
+        left: 0;
+        top: 0;
+        z-index: 1000;
+        transition: var(--transition);
+        display: flex;
+        flex-direction: column;
+      }
+
+      .stklysell-logo-area {
+        height: var(--topbar-height);
+        display: flex;
+        align-items: center;
+        padding: 0 2rem;
+        font-weight: 800;
+        font-size: 1.5rem;
+        color: var(--primary-purple);
+        border-bottom: 1px solid var(--border-color);
+      }
+
+      .stklysell-nav {
+        flex: 1;
+        padding: 1.5rem 1rem;
+        overflow-y: auto;
+      }
+
+      .stklysell-nav-item {
+        display: flex;
+        align-items: center;
+        padding: 0.85rem 1.25rem;
+        margin-bottom: 0.5rem;
+        border-radius: 8px;
+        color: var(--text-gray);
+        text-decoration: none;
+        cursor: pointer;
+        transition: var(--transition);
+        font-weight: 500;
+      }
+
+      .stklysell-nav-item svg {
+        margin-right: 12px;
+        width: 20px;
+        height: 20px;
+      }
+
+      .stklysell-nav-item:hover {
+        background: var(--hover-blue);
+        color: var(--secondary-blue);
+      }
+
+      .stklysell-nav-item.active {
+        background: var(--primary-purple);
+        color: var(--bg-white);
+      }
+
+      /* --- MAIN CONTENT --- */
+      .stklysell-main {
+        flex: 1;
+        margin-left: var(--sidebar-width);
+        width: calc(100% - var(--sidebar-width));
+        transition: var(--transition);
+      }
+
+      /* --- TOPBAR --- */
+      .stklysell-topbar {
+        height: var(--topbar-height);
+        background: var(--bg-white);
+        border-bottom: 1px solid var(--border-color);
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 0 2rem;
+        position: sticky;
+        top: 0;
+        z-index: 900;
+      }
+
+      .stklysell-top-left {
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+      }
+
+      .stklysell-hamburger {
+        display: none;
+        background: none;
+        border: none;
+        cursor: pointer;
+        padding: 5px;
+      }
+
+      .stklysell-welcome-text {
+        font-weight: 600;
+        font-size: 1.1rem;
+      }
+
+      .stklysell-top-right {
+        display: flex;
+        align-items: center;
+        gap: 1.5rem;
+      }
+
+      .stklysell-user-info {
+        font-size: 0.9rem;
+        color: var(--text-gray);
+      }
+
+      /* --- BUTTONS --- */
+      .stklysell-btn {
+        padding: 0.6rem 1.2rem;
+        border-radius: 6px;
+        border: none;
+        font-weight: 600;
+        cursor: pointer;
+        text-decoration: none;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        position: relative;
+        overflow: hidden;
+        z-index: 1;
+        transition: var(--transition);
+      }
+
+      .stklysell-btn-outline {
+        background: transparent;
+        border: 1px solid var(--border-color);
+        color: var(--text-dark);
+      }
+
+      .stklysell-btn-primary {
+        background: var(--primary-purple);
+        color: white;
+      }
+
+      .stklysell-btn-fill {
+        background: var(--bg-light);
+        color: var(--text-dark);
+        border: 1px solid var(--border-color);
+      }
+
+      .stklysell-btn-fill::after {
+        content: "";
+        position: absolute;
+        bottom: -100%;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: var(--secondary-blue);
+        transition: var(--transition);
+        z-index: -1;
+      }
+
+      .stklysell-btn-fill:hover {
+        color: white;
+        border-color: var(--secondary-blue);
+      }
+
+      .stklysell-btn-fill:hover::after {
+        bottom: 0;
+      }
+
+      /* --- CONTENT CONTAINER --- */
+      .stklysell-content-area {
+        padding: 2rem;
+        max-width: 1600px;
+        margin: 0 auto;
+      }
+      /* .stklysell-content-area {
+        padding: 2rem;
+      } */
+
+      @media (max-width: 768px) {
+        .stklysell-content-area {
+          padding: 1rem;
+        }
+      }
+      .stklysell-section {
+        display: none;
+        animation: fadeIn 0.4s ease;
+      }
+
+      .stklysell-section.active {
+        display: block;
+      }
+
+      @keyframes fadeIn {
+        from {
+          opacity: 0;
+          transform: translateY(10px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+
+      /* --- DASHBOARD COMPONENTS --- */
+      .stklysell-stats-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+        gap: 1.5rem;
+        margin-bottom: 2rem;
+      }
+      @media (max-width: 600px) {
+        .stklysell-stats-grid {
+          grid-template-columns: 1fr;
+        }
+      }
+      .stklysell-stat-card {
+        background: var(--bg-white);
+        padding: 1.5rem;
+        border-radius: 12px;
+        border: 1px solid var(--border-color);
+        display: flex;
+        flex-direction: column;
+        gap: 0.5rem;
+        box-shadow: var(--shadow);
+        transition: var(--transition);
+      }
+
+      .stklysell-stat-card:hover {
+        transform: translateY(-5px);
+        border-color: var(--primary-purple);
+      }
+
+      .stklysell-stat-label {
+        color: var(--text-gray);
+        font-size: 0.85rem;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+      }
+
+      .stklysell-stat-value {
+        font-size: 1.8rem;
+        font-weight: 800;
+        color: var(--text-dark);
+      }
+
+      /* --- CHARTS --- */
+      .stklysell-charts-grid {
+        display: grid;
+        grid-template-columns: 1.5fr 1fr;
+        gap: 1.5rem;
+        margin-bottom: 2rem;
+      }
+
+      .stklysell-card {
+        background: var(--bg-white);
+        border-radius: 12px;
+        border: 1px solid var(--border-color);
+        padding: 1.5rem;
+        box-shadow: var(--shadow);
+      }
+
+      .stklysell-card-title {
+        font-size: 1.1rem;
+        font-weight: 700;
+        margin-bottom: 1.5rem;
+        color: var(--text-dark);
+      }
+
+      .stklysell-canvas-container {
+        width: 100%;
+        height: 280px;
+        min-height: 220px;
+      }
+
+      @media (max-width: 768px) {
+        .stklysell-canvas-container {
+          height: 220px;
+        }
+      }
+
+      canvas {
+        width: 100% !important;
+        height: 100% !important;
+      }
+
+      /* --- TABLES --- */
+      .stklysell-table-wrapper {
+        width: 100%;
+        overflow-x: auto;
+        border-radius: 8px;
+        border: 1px solid var(--border-color);
+      }
+
+      .stklysell-table {
+        width: 100%;
+        border-collapse: collapse;
+        background: var(--bg-white);
+        min-width: 800px;
+      }
+
+      .stklysell-table th {
+        background: #f8fafc;
+        padding: 1rem;
+        text-align: left;
+        font-weight: 600;
+        color: var(--text-gray);
+        font-size: 0.85rem;
+        border-bottom: 1px solid var(--border-color);
+      }
+
+      .stklysell-table td {
+        padding: 1rem;
+        border-bottom: 1px solid var(--border-color);
+        vertical-align: middle;
+      }
+
+      .stklysell-badge {
+        padding: 4px 10px;
+        border-radius: 99px;
+        font-size: 0.75rem;
+        font-weight: 600;
+        text-transform: capitalize;
+      }
+
+      .stklysell-badge-completed {
+        background: #dcfce7;
+        color: #166534;
+      }
+      .stklysell-badge-pending {
+        background: #fef9c3;
+        color: #854d0e;
+      }
+      .stklysell-badge-cancelled {
+        background: #fee2e2;
+        color: #991b1b;
+      }
+
+      /* --- PRODUCT GRID --- */
+      .stklysell-product-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+        gap: 1.5rem;
+      }
+
+      .stklysell-product-card {
+        background: var(--bg-white);
+        border-radius: 12px;
+        overflow: hidden;
+        border: 1px solid var(--border-color);
+        transition: var(--transition);
+      }
+
+      .stklysell-product-card:hover {
+        transform: translateY(-8px);
+        box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+      }
+
+      .stklysell-product-img {
+        width: 100%;
+        height: 180px;
+        background: #f1f5f9;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: #cbd5e1;
+      }
+
+      .stklysell-product-body {
+        padding: 1.25rem;
+      }
+
+      .stklysell-product-name {
+        font-weight: 700;
+        margin-bottom: 0.5rem;
+      }
+
+      .stklysell-product-meta {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 1rem;
+      }
+
+      .stklysell-product-price {
+        color: var(--secondary-blue);
+        font-weight: 800;
+      }
+
+      .stklysell-product-stock {
+        font-size: 0.8rem;
+        color: var(--text-gray);
+      }
+
+      /* --- CUSTOMERS & MESSAGES --- */
+      .stklysell-customer-list {
+        display: grid;
+        gap: 1rem;
+      }
+
+      .stklysell-customer-item {
+        display: flex;
+        align-items: center;
+        padding: 1rem;
+        background: var(--bg-white);
+        border-radius: 10px;
+        border: 1px solid var(--border-color);
+        gap: 1rem;
+      }
+
+      .stklysell-avatar {
+        width: 48px;
+        height: 48px;
+        border-radius: 50%;
+        background: var(--hover-blue);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-weight: 700;
+        color: var(--secondary-blue);
+        flex-shrink: 0;
+      }
+
+      .stklysell-msg-layout {
+        display: grid;
+        grid-template-columns: 320px 1fr;
+        /* height: calc(100vh - 200px); */
+        gap: 1rem;
+      }
+      .stklysell-msg-layout {
+        min-height: 400px;
+        height: auto;
+      }
+
+      @media (max-width: 768px) {
+        .stklysell-msg-layout {
+          grid-template-columns: 1fr;
+          height: auto;
+        }
+
+        .stklysell-msg-window {
+          height: 400px;
+        }
+      }
+      @media (max-width: 480px) {
+        .stklysell-top-right {
+          gap: 0.5rem;
+        }
+
+        .stklysell-btn {
+          padding: 0.4rem 0.7rem;
+          font-size: 12px;
+        }
+      }
+      .stklysell-table-wrapper {
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+      }
+      .stklysell-msg-list {
+        background: var(--bg-white);
+        border: 1px solid var(--border-color);
+        border-radius: 12px;
+        overflow-y: auto;
+      }
+
+      .stklysell-msg-window {
+        background: var(--bg-white);
+        border: 1px solid var(--border-color);
+        border-radius: 12px;
+        display: flex;
+        flex-direction: column;
+      }
+
+      .stklysell-chat-body {
+        flex: 1;
+        padding: 1.5rem;
+        background: #f8fafc;
+        overflow-y: auto;
+      }
+
+      .stklysell-chat-input {
+        padding: 1rem;
+        border-top: 1px solid var(--border-color);
+        display: flex;
+        gap: 0.5rem;
+      }
+
+      .stklysell-input {
+        width: 100%;
+        padding: 0.75rem;
+        border: 1px solid var(--border-color);
+        border-radius: 6px;
+        outline: none;
+        transition: var(--transition);
+      }
+
+      .stklysell-input:focus {
+        border-color: var(--secondary-blue);
+        box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+      }
+
+      .stklysell-input[readonly] {
+        background: #f1f5f9;
+        cursor: not-allowed;
+      }
+
+      /* --- SETTINGS --- */
+      .stklysell-settings-form {
+        max-width: 600px;
+        display: grid;
+        gap: 1.5rem;
+      }
+
+      .stklysell-field {
+        display: flex;
+        flex-direction: column;
+        gap: 0.5rem;
+      }
+
+      .stklysell-label {
+        font-size: 0.9rem;
+        font-weight: 600;
+      }
+
+      /* --- MOBILE OVERLAY --- */
+      .stklysell-overlay {
+        display: none;
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0, 0, 0, 0.5);
+        z-index: 999;
+      }
+
+      /* --- RESPONSIVE MEDIA QUERIES --- */
+      @media (max-width: 1024px) {
+        .stklysell-charts-grid {
+          grid-template-columns: 1fr;
+        }
+        .stklysell-msg-layout {
+          grid-template-columns: 260px 1fr;
+        }
+      }
+      @media (max-width: 768px) {
+        .stklysell-sidebar {
+          left: -100%;
+          width: 280px;
+          height: 100vh;
+          overflow-y: auto;
+        }
+
+        .stklysell-sidebar.open {
+          left: 0;
+        }
+      }
+      @media (max-width: 768px) {
+        /* .stklysell-sidebar {
+          left: -100%;
+        }
+        .stklysell-sidebar.open {
+          left: 0;
+          width: 280px;
+        } */
+        .stklysell-main {
+          margin-left: 0;
+          width: 100%;
+        }
+        .stklysell-hamburger {
+          display: block;
+        }
+        .stklysell-overlay.active {
+          display: block;
+        }
+        .stklysell-topbar {
+          padding: 0 1rem;
+        }
+        .stklysell-welcome-text {
+          display: none;
+        }
+        .stklysell-content-area {
+          padding: 1.5rem 1rem;
+        }
+        .stklysell-msg-layout {
+          grid-template-columns: 1fr;
+        }
+        .stklysell-msg-list {
+          display: none; /* In real app, we would toggle visibility */
+        }
+      }
+
+      @media (max-width: 480px) {
+        .stklysell-stats-grid {
+          grid-template-columns: 1fr;
+        }
+        .stklysell-product-grid {
+          grid-template-columns: 1fr;
+        }
+        .stklysell-user-info {
+          display: none;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="stklysell-overlay" id="stklysellOverlay"></div>
+
+    <div class="stklysell-wrapper">
+      <!-- Sidebar -->
+      <aside class="stklysell-sidebar" id="stklysellSidebar">
+        <div class="stklysell-logo-area">StklySell</div>
+        <nav class="stklysell-nav">
+          <a
+            class="stklysell-nav-item active"
+            onclick="stklysellLoadSection('dashboard', this)"
+          >
+            <svg
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+            >
+              <rect x="3" y="3" width="7" height="7"></rect>
+              <rect x="14" y="3" width="7" height="7"></rect>
+              <rect x="14" y="14" width="7" height="7"></rect>
+              <rect x="3" y="14" width="7" height="7"></rect>
+            </svg>
+            Dashboard
+          </a>
+          <a
+            class="stklysell-nav-item"
+            onclick="stklysellLoadSection('orders', this)"
+          >
+            <svg
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+            >
+              <path
+                d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4Z"
+              ></path>
+              <path d="M3 6h18"></path>
+              <path d="M16 10a4 4 0 0 1-8 0"></path>
+            </svg>
+            Orders
+          </a>
+          <a
+            class="stklysell-nav-item"
+            onclick="stklysellLoadSection('products', this)"
+          >
+            <svg
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+            >
+              <path d="m7.5 4.27 9 5.15"></path>
+              <path
+                d="M21 8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16Z"
+              ></path>
+              <path d="m3.27 6.96 8.73 5.05 8.73-5.05"></path>
+              <path d="M12 22.08V12"></path>
+            </svg>
+            Products
+          </a>
+          <!-- <a
+            class="stklysell-nav-item"
+            onclick="stklysellLoadSection('revenue', this)"
+          >
+            <svg
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+            >
+              <line x1="12" y1="1" x2="12" y2="23"></line>
+              <path
+                d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"
+              ></path>
+            </svg>
+            Revenue
+          </a> -->
+          <a
+            class="stklysell-nav-item"
+            onclick="stklysellLoadSection('customers', this)"
+          >
+            <svg
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+            >
+              <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"></path>
+              <circle cx="9" cy="7" r="4"></circle>
+              <path d="M22 21v-2a4 4 0 0 0-3-3.87"></path>
+              <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
+            </svg>
+            Customers
+          </a>
+          <a
+            class="stklysell-nav-item"
+            onclick="stklysellLoadSection('messages', this)"
+          >
+            <svg
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+            >
+              <path
+                d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"
+              ></path>
+            </svg>
+            Messages
+          </a>
+          <a
+            class="stklysell-nav-item"
+            onclick="stklysellLoadSection('settings', this)"
+          >
+            <svg
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+            >
+              <circle cx="12" cy="12" r="3"></circle>
+              <path
+                d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"
+              ></path>
+            </svg>
+            Settings
+          </a>
+        </nav>
+      </aside>
+
+      <!-- Main Body -->
+      <main class="stklysell-main">
+        <!-- Topbar -->
+        <header class="stklysell-topbar">
+          <div class="stklysell-top-left">
+            <button
+              class="stklysell-hamburger"
+              id="stklysellHam"
+              aria-label="Toggle Sidebar"
+            >
+              <svg
+                width="24"
+                height="24"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+              >
+                <line x1="3" y1="12" x2="21" y2="12"></line>
+                <line x1="3" y1="6" x2="21" y2="6"></line>
+                <line x1="3" y1="18" x2="21" y2="18"></line>
+              </svg>
+            </button>
+            <span class="stklysell-welcome-text" id="welcomeText"
+              >Welcome back, Admin</span
+            >
+          </div>
+          <div class="stklysell-top-right">
+            <span class="stklysell-user-info" id="userEmail"
+              >admin@stklysell.com</span
+            >
+            <button
+              class="stklysell-btn stklysell-btn-fill"
+              onclick="window.location.href = './index.html'"
+            >
+              Logout
+            </button>
+          </div>
+        </header>
+
+        <!-- Main Dynamic Content -->
+        <div class="stklysell-content-area">
+          <!-- SECTION: Dashboard -->
+          <section id="sect-dashboard" class="stklysell-section active">
+            <div class="stklysell-stats-grid">
+              <div class="stklysell-stat-card">
+                <span class="stklysell-stat-label">Total Orders</span>
+                <span class="stklysell-stat-value" data-count="1248">0</span>
+              </div>
+              <div class="stklysell-stat-card">
+                <span class="stklysell-stat-label">Revenue</span>
+                <span
+                  class="stklysell-stat-value"
+                  data-prefix="$"
+                  data-count="45290"
+                  >0</span
+                >
+              </div>
+              <div class="stklysell-stat-card">
+                <span class="stklysell-stat-label">Products</span>
+                <span class="stklysell-stat-value" data-count="86">0</span>
+              </div>
+              <div class="stklysell-stat-card">
+                <span class="stklysell-stat-label">Customers</span>
+                <span class="stklysell-stat-value" data-count="3120">0</span>
+              </div>
+            </div>
+
+            <div class="stklysell-charts-grid">
+              <div class="stklysell-card">
+                <h3 class="stklysell-card-title">Revenue Overview</h3>
+                <div class="stklysell-canvas-container">
+                  <canvas id="revenueLineChart"></canvas>
+                </div>
+              </div>
+              <div class="stklysell-card">
+                <h3 class="stklysell-card-title">Order Trends</h3>
+                <div class="stklysell-canvas-container">
+                  <canvas id="ordersBarChart"></canvas>
+                </div>
+              </div>
+            </div>
+
+            <div class="stklysell-card">
+              <h3 class="stklysell-card-title">Recent Orders</h3>
+              <div class="stklysell-table-wrapper">
+                <table class="stklysell-table">
+                  <thead>
+                    <tr>
+                      <th>Order ID</th>
+                      <th>Customer</th>
+                      <th>Amount</th>
+                      <th>Status</th>
+                      <th>Date</th>
+                      <th>Action</th>
+                    </tr>
+                  </thead>
+                  <tbody id="recentOrdersTable">
+                    <!-- Dynamic Rows -->
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </section>
+
+          <!-- SECTION: Orders -->
+          <section id="sect-orders" class="stklysell-section">
+            <h2 style="margin-bottom: 1.5rem">All Orders</h2>
+            <div class="stklysell-card">
+              <div class="stklysell-table-wrapper">
+                <table class="stklysell-table">
+                  <thead>
+                    <tr>
+                      <th>Order ID</th>
+                      <th>Customer</th>
+                      <th>Amount</th>
+                      <th>Status</th>
+                      <th>Date</th>
+                      <th>Action</th>
+                    </tr>
+                  </thead>
+                  <tbody id="allOrdersTable"></tbody>
+                </table>
+              </div>
+            </div>
+          </section>
+
+          <!-- SECTION: Products -->
+          <section id="sect-products" class="stklysell-section">
+            <div
+              style="
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+                margin-bottom: 1.5rem;
+              "
+            >
+              <h2>Product Inventory</h2>
+              <button
+                class="stklysell-btn stklysell-btn-primary"
+                onclick="window.location.href = './404.html'"
+              >
+                + Add Product
+              </button>
+            </div>
+            <div class="stklysell-product-grid" id="productGrid">
+              <!-- Dynamic Products -->
+            </div>
+          </section>
+
+          <!-- SECTION: Revenue -->
+          <section id="sect-revenue" class="stklysell-section">
+            <h2 style="margin-bottom: 1.5rem">Revenue Analytics</h2>
+            <div class="stklysell-stats-grid">
+              <div class="stklysell-stat-card">
+                <span class="stklysell-stat-label">Today's Sales</span>
+                <span class="stklysell-stat-value">$1,240</span>
+              </div>
+              <div class="stklysell-stat-card">
+                <span class="stklysell-stat-label">Weekly Profit</span>
+                <span class="stklysell-stat-value">$8,450</span>
+              </div>
+              <div class="stklysell-stat-card">
+                <span class="stklysell-stat-label">Monthly Gross</span>
+                <span class="stklysell-stat-value">$32,100</span>
+              </div>
+              <div class="stklysell-stat-card">
+                <span class="stklysell-stat-label">Net Margin</span>
+                <span class="stklysell-stat-value">24.5%</span>
+              </div>
+            </div>
+            <div class="stklysell-charts-grid">
+              <div class="stklysell-card">
+                <h3 class="stklysell-card-title">Full Revenue Cycle</h3>
+                <div class="stklysell-canvas-container">
+                  <canvas id="fullRevenueChart"></canvas>
+                </div>
+              </div>
+              <div class="stklysell-card">
+                <h3 class="stklysell-card-title">Profit Distribution</h3>
+                <div class="stklysell-canvas-container">
+                  <canvas id="profitPieChart"></canvas>
+                </div>
+              </div>
+            </div>
+          </section>
+
+          <!-- SECTION: Customers -->
+          <section id="sect-customers" class="stklysell-section">
+            <h2 style="margin-bottom: 1.5rem">Customer List</h2>
+            <div class="stklysell-customer-list" id="customerList">
+              <!-- Dynamic Customers -->
+            </div>
+          </section>
+
+          <!-- SECTION: Messages -->
+          <section id="sect-messages" class="stklysell-section">
+            <h2 style="margin-bottom: 1.5rem">Messages</h2>
+            <div class="stklysell-msg-layout">
+              <div class="stklysell-msg-list" id="chatContacts">
+                <!-- Dynamic Contacts -->
+              </div>
+              <div class="stklysell-msg-window">
+                <div class="stklysell-chat-body" id="chatBody">
+                  <div
+                    style="
+                      text-align: center;
+                      color: var(--text-gray);
+                      margin-top: 20%;
+                    "
+                  >
+                    Select a conversation to start chatting
+                  </div>
+                </div>
+                <div class="stklysell-chat-input">
+                  <input
+                    type="text"
+                    class="stklysell-input"
+                    placeholder="Type a message..."
+                  />
+                  <button
+                    class="stklysell-btn stklysell-btn-primary"
+                    onclick="window.location.href = './404.html'"
+                  >
+                    Send
+                  </button>
+                </div>
+              </div>
+            </div>
+          </section>
+
+          <!-- SECTION: Settings -->
+          <section id="sect-settings" class="stklysell-section">
+            <h2 style="margin-bottom: 1.5rem">Store Settings</h2>
+            <div class="stklysell-card">
+              <form class="stklysell-settings-form" action="./404.html">
+                <div class="stklysell-field">
+                  <label class="stklysell-label">Store Name</label>
+                  <input
+                    type="text"
+                    class="stklysell-input"
+                    value="Stkly Official Store"
+                  />
+                </div>
+                <div class="stklysell-field">
+                  <label class="stklysell-label">Login Email (Read-only)</label>
+                  <input
+                    type="email"
+                    class="stklysell-input"
+                    id="settingsEmail"
+                    readonly
+                  />
+                </div>
+                <div class="stklysell-field">
+                  <label class="stklysell-label">Phone Number</label>
+                  <input
+                    type="text"
+                    class="stklysell-input"
+                    value="+1 (555) 000-1234"
+                  />
+                </div>
+                <div class="stklysell-field">
+                  <label class="stklysell-label">Store Address</label>
+                  <textarea class="stklysell-input" rows="3">
+123 Commerce Way, Tech City, 94000</textarea
+                  >
+                </div>
+                <button
+                  class="stklysell-btn stklysell-btn-fill"
+                  style="width: fit-content"
+                >
+                  Save Changes
+                </button>
+              </form>
+            </div>
+          </section>
+        </div>
+      </main>
+    </div>
+
+    <script>
+      /* --- AUTH LOGIC --- */
+      const user = JSON.parse(localStorage.getItem("stkly_user"));
+      // Mocking user if not found for this preview, but implementing redirect logic
+      if (!user) {
+        // window.location.href="./login.html"; // Commented out for preview stability
+        const mockUser = { email: "demo_seller@stklysell.com" };
+        document.getElementById("userEmail").textContent = mockUser.email;
+        document.getElementById("settingsEmail").value = mockUser.email;
+        document.getElementById("welcomeText").textContent =
+          `Welcome back, ${mockUser.email.split("@")[0]}`;
+      } else {
+        document.getElementById("userEmail").textContent = user.email;
+        document.getElementById("settingsEmail").value = user.email;
+        document.getElementById("welcomeText").textContent =
+          `Welcome back, ${user.email.split("@")[0]}`;
+      }
+
+      function stklysellLogout() {
+        localStorage.removeItem("stkly_user");
+        window.location.href = "./login.html";
+      }
+
+      /* --- UI CONTROLS --- */
+      const sidebar = document.getElementById("stklysellSidebar");
+      const overlay = document.getElementById("stklysellOverlay");
+      const ham = document.getElementById("stklysellHam");
+
+      ham.addEventListener("click", () => {
+        sidebar.classList.toggle("open");
+        overlay.classList.toggle("active");
+      });
+
+      overlay.addEventListener("click", () => {
+        sidebar.classList.remove("open");
+        overlay.classList.remove("active");
+      });
+
+      /* --- SECTION SWITCHER --- */
+      function stklysellLoadSection(sectionId, element) {
+        // Update Nav UI
+        document
+          .querySelectorAll(".stklysell-nav-item")
+          .forEach((item) => item.classList.remove("active"));
+        if (element) element.classList.add("active");
+
+        // Switch Visibility
+        document
+          .querySelectorAll(".stklysell-section")
+          .forEach((sec) => sec.classList.remove("active"));
+        const target = document.getElementById(`sect-${sectionId}`);
+        if (target) target.classList.add("active");
+
+        // Close sidebar on mobile
+        sidebar.classList.remove("open");
+        overlay.classList.remove("active");
+
+        // Custom triggers
+        if (sectionId === "dashboard") initStats();
+      }
+
+      /* --- DATA MOCKING & RENDERERS --- */
+      function initStats() {
+        document.querySelectorAll(".stklysell-stat-value").forEach((el) => {
+          const target = parseInt(el.getAttribute("data-count"));
+          const prefix = el.getAttribute("data-prefix") || "";
+          let current = 0;
+          const step = target / 50;
+          const timer = setInterval(() => {
+            current += step;
+            if (current >= target) {
+              el.textContent = prefix + target.toLocaleString();
+              clearInterval(timer);
+            } else {
+              el.textContent = prefix + Math.floor(current).toLocaleString();
+            }
+          }, 20);
+        });
+      }
+
+      function renderOrders() {
+        const orders = [
+          {
+            id: "#SK-9012",
+            customer: "John Doe",
+            amount: "$120.50",
+            status: "completed",
+            date: "Oct 24, 2023",
+          },
+          {
+            id: "#SK-9013",
+            customer: "Sarah Miller",
+            amount: "$45.00",
+            status: "pending",
+            date: "Oct 25, 2023",
+          },
+          {
+            id: "#SK-9014",
+            customer: "Michael Chen",
+            amount: "$312.20",
+            status: "completed",
+            date: "Oct 25, 2023",
+          },
+          {
+            id: "#SK-9015",
+            customer: "Emma Wilson",
+            amount: "$89.99",
+            status: "cancelled",
+            date: "Oct 26, 2023",
+          },
+          {
+            id: "#SK-9016",
+            customer: "Robert Fox",
+            amount: "$150.00",
+            status: "completed",
+            date: "Oct 26, 2023",
+          },
+        ];
+
+        const html = orders
+          .map(
+            (o) => `
+                <tr>
+                    <td><strong>${o.id}</strong></td>
+                    <td>${o.customer}</td>
+                    <td>${o.amount}</td>
+                    <td><span class="stklysell-badge stklysell-badge-${o.status}">${o.status}</span></td>
+                    <td>${o.date}</td>
+                    <td><button class="stklysell-btn stklysell-btn-outline" style="padding:4px 8px; font-size:12px"  onclick="window.location.href = './404.html'">View</button></td>
+                </tr>
+            `,
+          )
+          .join("");
+
+        document.getElementById("recentOrdersTable").innerHTML = html;
+        document.getElementById("allOrdersTable").innerHTML = html + html; // More rows for orders page
+      }
+
+      function renderProducts() {
+        const products = [
+          {
+            name: "Ultra-Soft Cotton Tee",
+            price: "$24.99",
+            stock: 45,
+            img: "👕",
+          },
+          { name: "Tech Pro Backpack", price: "$89.00", stock: 12, img: "🎒" },
+          {
+            name: "Wireless Noise Cancelling",
+            price: "$199.99",
+            stock: 8,
+            img: "🎧",
+          },
+          {
+            name: "Minimalist Desk Lamp",
+            price: "$42.50",
+            stock: 0,
+            img: "💡",
+          },
+          { name: "Ergonomic Mouse", price: "$55.00", stock: 22, img: "🖱️" },
+          {
+            name: "Mechanical Keyboard",
+            price: "$129.99",
+            stock: 15,
+            img: "⌨️",
+          },
+          {
+            name: "Smart Fitness Watch",
+            price: "$79.00",
+            stock: 30,
+            img: "⌚",
+          },
+          {
+            name: "Leather Slim Wallet",
+            price: "$35.00",
+            stock: 50,
+            img: "👛",
+          },
+        ];
+
+        const html = products
+          .map(
+            (p) => `
+                <div class="stklysell-product-card">
+                    <div class="stklysell-product-img" style="font-size: 4rem;">${p.img}</div>
+                    <div class="stklysell-product-body">
+                        <div class="stklysell-product-name">${p.name}</div>
+                        <div class="stklysell-product-meta">
+                            <span class="stklysell-product-price">${p.price}</span>
+                            <span class="stklysell-product-stock">${p.stock} in stock</span>
+                        </div>
+                        <button class="stklysell-btn stklysell-btn-fill" style="width:100%"  onclick="window.location.href = './404.html'">Edit Product</button>
+                    </div>
+                </div>
+            `,
+          )
+          .join("");
+        document.getElementById("productGrid").innerHTML = html;
+      }
+
+      function renderCustomers() {
+        const customers = [
+          {
+            name: "Alice Johnson",
+            email: "alice@example.com",
+            orders: 12,
+            init: "AJ",
+          },
+          { name: "Bob Smith", email: "bob.s@work.com", orders: 5, init: "BS" },
+          {
+            name: "Charlie Davis",
+            email: "charlie@web.io",
+            orders: 28,
+            init: "CD",
+          },
+          {
+            name: "Diana Prince",
+            email: "diana@amazon.com",
+            orders: 2,
+            init: "DP",
+          },
+        ];
+
+        const html = customers
+          .map(
+            (c) => `
+                <div class="stklysell-customer-item">
+                    <div class="stklysell-avatar">${c.init}</div>
+                    <div style="flex:1">
+                        <div style="font-weight:700">${c.name}</div>
+                        <div style="font-size:0.8rem; color:var(--text-gray)">${c.email}</div>
+                    </div>
+                    <div style="text-align:right">
+                        <div style="font-weight:700">${c.orders}</div>
+                        <div style="font-size:0.7rem; color:var(--text-gray)">Total Orders</div>
+                    </div>
+                </div>
+            `,
+          )
+          .join("");
+        document.getElementById("customerList").innerHTML = html;
+      }
+
+      function renderMessages() {
+        const contacts = [
+          {
+            name: "Support Team",
+            last: "How can we help you?",
+            time: "10:30 AM",
+          },
+          {
+            name: "John Doe",
+            last: "Is the order shipped yet?",
+            time: "Yesterday",
+          },
+          {
+            name: "Marketing",
+            last: "New campaign starts Monday",
+            time: "Oct 24",
+          },
+        ];
+
+        const html = contacts
+          .map(
+            (c) => `
+                <div class="stklysell-nav-item" style="border-bottom: 1px solid var(--border-color); border-radius:0; margin:0">
+                    <div style="flex:1">
+                        <div style="font-weight:700">${c.name}</div>
+                        <div style="font-size:0.75rem; color:var(--text-gray); overflow:hidden; text-overflow:ellipsis; white-space:nowrap; max-width:180px">${c.last}</div>
+                    </div>
+                    <span style="font-size:0.7rem; color:var(--text-gray)">${c.time}</span>
+                </div>
+            `,
+          )
+          .join("");
+        document.getElementById("chatContacts").innerHTML = html;
+      }
+
+      /* --- CANVAS CHARTING --- */
+      function drawLineChart(id, color) {
+        const canvas = document.getElementById(id);
+        if (!canvas) return;
+        const ctx = canvas.getContext("2d");
+        const dpr = window.devicePixelRatio || 1;
+
+        // Handle resizing
+        const rect = canvas.getBoundingClientRect();
+        canvas.width = rect.width * dpr;
+        canvas.height = rect.height * dpr;
+        ctx.scale(dpr, dpr);
+
+        const padding = 40;
+        const w = rect.width - padding * 2;
+        const h = rect.height - padding * 2;
+        const points = [10, 45, 30, 70, 50, 90, 80];
+        const max = 100;
+
+        // Draw axis
+        ctx.strokeStyle = "#e5e7eb";
+        ctx.beginPath();
+        ctx.moveTo(padding, padding);
+        ctx.lineTo(padding, rect.height - padding);
+        ctx.lineTo(rect.width - padding, rect.height - padding);
+        ctx.stroke();
+
+        // Draw Line
+        ctx.strokeStyle = color;
+        ctx.lineWidth = 3;
+        ctx.lineJoin = "round";
+        ctx.beginPath();
+        points.forEach((p, i) => {
+          const x = padding + i * (w / (points.length - 1));
+          const y = rect.height - padding - (p / max) * h;
+          if (i === 0) ctx.moveTo(x, y);
+          else ctx.lineTo(x, y);
+        });
+        ctx.stroke();
+
+        // Draw gradient area
+        ctx.lineTo(rect.width - padding, rect.height - padding);
+        ctx.lineTo(padding, rect.height - padding);
+        const grad = ctx.createLinearGradient(0, 0, 0, rect.height);
+        grad.addColorStop(0, color + "44");
+        grad.addColorStop(1, "transparent");
+        ctx.fillStyle = grad;
+        ctx.fill();
+      }
+
+      function drawBarChart(id, color) {
+        const canvas = document.getElementById(id);
+        if (!canvas) return;
+        const ctx = canvas.getContext("2d");
+        const dpr = window.devicePixelRatio || 1;
+        const rect = canvas.getBoundingClientRect();
+        canvas.width = rect.width * dpr;
+        canvas.height = rect.height * dpr;
+        ctx.scale(dpr, dpr);
+
+        const padding = 40;
+        const bars = [40, 70, 55, 90, 65, 80];
+        const barW = (rect.width - padding * 2) / (bars.length * 1.5);
+
+        ctx.fillStyle = color;
+        bars.forEach((b, i) => {
+          const x = padding + i * barW * 1.5 + barW / 2;
+          const h = (b / 100) * (rect.height - padding * 2);
+          const y = rect.height - padding - h;
+
+          // Rounded bar
+          ctx.beginPath();
+          ctx.roundRect(x, y, barW, h, [4, 4, 0, 0]);
+          ctx.fill();
+        });
+      }
+
+      function drawPieChart(id) {
+        const canvas = document.getElementById(id);
+        if (!canvas) return;
+        const ctx = canvas.getContext("2d");
+        const dpr = window.devicePixelRatio || 1;
+        const rect = canvas.getBoundingClientRect();
+        canvas.width = rect.width * dpr;
+        canvas.height = rect.height * dpr;
+        ctx.scale(dpr, dpr);
+
+        const centerX = rect.width / 2;
+        const centerY = rect.height / 2;
+        const radius = Math.min(centerX, centerY) - 40;
+
+        const data = [
+          { v: 40, c: "#5f259f" },
+          { v: 30, c: "#2563eb" },
+          { v: 20, c: "#10b981" },
+          { v: 10, c: "#f59e0b" },
+        ];
+
+        let startAngle = 0;
+        data.forEach((slice) => {
+          const sliceAngle = (slice.v / 100) * Math.PI * 2;
+          ctx.fillStyle = slice.c;
+          ctx.beginPath();
+          ctx.moveTo(centerX, centerY);
+          ctx.arc(
+            centerX,
+            centerY,
+            radius,
+            startAngle,
+            startAngle + sliceAngle,
+          );
+          ctx.closePath();
+          ctx.fill();
+          startAngle += sliceAngle;
+        });
+      }
+
+      /* --- INITIALIZATION --- */
+      window.onload = () => {
+        initStats();
+        renderOrders();
+        renderProducts();
+        renderCustomers();
+        renderMessages();
+
+        // Charts
+        setTimeout(() => {
+          drawLineChart("revenueLineChart", "#5f259f");
+          drawBarChart("ordersBarChart", "#2563eb");
+          drawLineChart("fullRevenueChart", "#10b981");
+          drawPieChart("profitPieChart");
+        }, 500);
+
+        // Handle window resizing for charts
+        window.addEventListener("resize", () => {
+          drawLineChart("revenueLineChart", "#5f259f");
+          drawBarChart("ordersBarChart", "#2563eb");
+          drawLineChart("fullRevenueChart", "#10b981");
+          drawPieChart("profitPieChart");
+        });
+      };
+    </script>
+  </body>
+</html>

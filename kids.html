@@ -1,0 +1,1406 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"
+    />
+    <title>NexStore | Kids & Baby</title>
+    <!-- Google Fonts -->
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+    />
+    <link rel="stylesheet" href="./footer.css" />
+    <style>
+      :root {
+        --primary-purple: #5f259f;
+        --secondary-blue: #2563eb;
+        --hover-blue: #e0e7ff;
+        --bg-white: #ffffff;
+        --bg-light: #f9f9f9;
+        --text-dark: #333333;
+        --text-gray: #606060;
+        --border-color: #e5e7eb;
+        --header-h: 60px;
+      }
+
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+        font-family: "Inter", sans-serif;
+        -webkit-tap-highlight-color: transparent;
+      }
+
+      body {
+        background-color: var(--bg-light);
+        color: var(--text-dark);
+        overflow-x: hidden;
+        line-height: 1.5;
+        width: 100%;
+      }
+
+      /* --- UTILITIES --- */
+      .no-scrollbar::-webkit-scrollbar {
+        display: none;
+      }
+      .no-scrollbar {
+        -ms-overflow-style: none;
+        scrollbar-width: none;
+      }
+
+      /* --- HEADER --- */
+      header {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: var(--header-h);
+        z-index: 1000;
+        display: flex;
+        align-items: center;
+        padding: 0 4%;
+        gap: 10px;
+        background: var(--bg-white);
+        border-bottom: 1px solid var(--border-color);
+        transition: all 0.3s ease;
+      }
+
+      .menu-btn {
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        flex-shrink: 0;
+        padding: 5px;
+      }
+
+      .logo {
+        color: var(--primary-purple);
+        font-weight: 800;
+        font-size: 1.1rem;
+        cursor: pointer;
+        flex-shrink: 0;
+        text-decoration: none;
+        letter-spacing: -0.5px;
+      }
+
+      .search-container {
+        flex: 1;
+        position: relative;
+        max-width: 600px;
+      }
+
+      .search-container input {
+        width: 100%;
+        padding: 8px 10px 8px 32px;
+        border-radius: 8px;
+        border: 1px solid var(--border-color);
+        background: var(--bg-light);
+        outline: none;
+        transition: 0.3s;
+        font-size: 0.85rem;
+      }
+
+      .search-container input:focus {
+        border-color: var(--primary-purple);
+        background: var(--bg-white);
+        box-shadow: 0 0 0 3px rgba(95, 37, 159, 0.1);
+      }
+
+      .search-icon {
+        position: absolute;
+        left: 10px;
+        top: 50%;
+        transform: translateY(-50%);
+        color: var(--text-gray);
+      }
+
+      .header-icons {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        flex-shrink: 0;
+      }
+
+      .icon-box {
+        cursor: pointer;
+        transition: 0.2s;
+        position: relative;
+        color: var(--text-dark);
+        display: flex;
+        align-items: center;
+        padding: 5px;
+      }
+
+      .icon-box:hover {
+        color: var(--primary-purple);
+      }
+
+      .login-btn {
+        background: var(--primary-purple);
+        color: white;
+        padding: 6px 10px;
+        border-radius: 6px;
+        font-weight: 600;
+        border: none;
+        cursor: pointer;
+        transition: 0.2s;
+        font-size: 0.75rem;
+      }
+
+      .cart-badge {
+        position: absolute;
+        top: -2px;
+        right: -2px;
+        background: var(--secondary-blue);
+        color: white;
+        font-size: 9px;
+        min-width: 16px;
+        height: 16px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 10px;
+        font-weight: 700;
+        border: 2px solid white;
+      }
+
+      /* --- DRAWERS --- */
+      .drawer {
+        position: fixed;
+        top: 0;
+        height: 100%;
+        background: var(--bg-white);
+        z-index: 2000;
+        transition: 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        box-shadow: 0 0 30px rgba(0, 0, 0, 0.1);
+        display: flex;
+        flex-direction: column;
+      }
+
+      .drawer-overlay {
+        position: fixed;
+        inset: 0;
+        background: rgba(0, 0, 0, 0.4);
+        backdrop-filter: blur(2px);
+        z-index: 1999;
+        display: none;
+      }
+
+      #sidebar {
+        left: -300px;
+        width: 80%;
+        max-width: 280px;
+      }
+      #sidebar.active {
+        left: 0;
+      }
+
+      #cartDrawer {
+        right: -450px;
+        width: 85%;
+        max-width: 350px;
+      }
+      #cartDrawer.active {
+        right: 0;
+      }
+
+      .drawer-header {
+        padding: 15px 20px;
+        border-bottom: 1px solid var(--border-color);
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+      }
+
+      .drawer-content {
+        flex: 1;
+        overflow-y: auto;
+        padding: 15px;
+      }
+
+      .cart-item {
+        display: flex;
+        gap: 12px;
+        margin-bottom: 15px;
+        padding-bottom: 15px;
+        border-bottom: 1px solid var(--border-color);
+      }
+
+      .cart-item img {
+        width: 60px;
+        height: 60px;
+        border-radius: 8px;
+        object-fit: cover;
+      }
+      .cart-item-info h4 {
+        font-size: 0.85rem;
+        margin-bottom: 4px;
+        font-weight: 600;
+      }
+      .cart-item-info p {
+        color: var(--primary-purple);
+        font-weight: 700;
+        font-size: 0.85rem;
+      }
+
+      .drawer-footer {
+        padding: 20px;
+        border-top: 1px solid var(--border-color);
+        background: var(--bg-light);
+      }
+
+      .total-row {
+        display: flex;
+        justify-content: space-between;
+        margin-bottom: 15px;
+        font-weight: 700;
+        font-size: 1rem;
+      }
+
+      .checkout-btn {
+        width: 100%;
+        padding: 14px;
+        border-radius: 8px;
+        border: none;
+        background: var(--primary-purple);
+        color: white;
+        font-weight: 700;
+        cursor: pointer;
+      }
+
+      /* --- FILTER BAR --- */
+      .filter-bar {
+        margin-top: calc(var(--header-h) + 10px);
+        display: flex;
+        overflow-x: auto;
+        padding: 5px 4%;
+        gap: 8px;
+        -webkit-overflow-scrolling: touch;
+      }
+
+      .chip {
+        flex: 0 0 auto;
+        padding: 6px 14px;
+        border-radius: 50px;
+        background: var(--bg-white);
+        border: 1px solid var(--border-color);
+        font-size: 0.75rem;
+        cursor: pointer;
+        transition: 0.2s;
+        white-space: nowrap;
+      }
+
+      .chip.active {
+        background: var(--primary-purple);
+        color: white;
+        border-color: var(--primary-purple);
+      }
+
+      /* --- HERO SLIDER --- */
+      .hero-section {
+        padding: 10px 4%;
+      }
+      .slider-viewport {
+        width: 100%;
+        aspect-ratio: 16/9;
+        border-radius: 12px;
+        overflow: hidden;
+        position: relative;
+      }
+      .slider-track {
+        display: flex;
+        transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+        height: 100%;
+      }
+      .slide {
+        min-width: 100%;
+        background-size: cover;
+        background-position: center;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        padding: 0 8%;
+        color: white;
+        position: relative;
+      }
+      .slide::after {
+        content: "";
+        position: absolute;
+        inset: 0;
+        background: linear-gradient(to right, rgba(0, 0, 0, 0.6), transparent);
+        z-index: 1;
+      }
+      .slide-content {
+        position: relative;
+        z-index: 2;
+      }
+
+      /* --- PRODUCT GRID --- */
+      .section-container {
+        padding: 10px 4% 30px;
+      }
+      .section-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 12px;
+      }
+      .section-header h2 {
+        font-size: 1.1rem;
+        font-weight: 700;
+      }
+
+      .product-grid {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 10px;
+      }
+
+      .product-card {
+        border-radius: 10px;
+        padding: 10px;
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+        background: var(--bg-white);
+        border: 1px solid var(--border-color);
+        transition: transform 0.2s;
+        position: relative;
+      }
+
+      .product-card:active {
+        transform: scale(0.98);
+      }
+
+      .promo-badge {
+        position: absolute;
+        top: 6px;
+        left: 6px;
+        background: #ff3e6c;
+        color: white;
+        padding: 2px 6px;
+        border-radius: 4px;
+        font-size: 0.6rem;
+        font-weight: 800;
+        z-index: 10;
+        text-transform: uppercase;
+      }
+      .festive-badge {
+        background: #ff9f00;
+      }
+      .sale-badge {
+        background: #2563eb;
+      }
+
+      .img-container {
+        width: 100%;
+        aspect-ratio: 1;
+        border-radius: 6px;
+        background: #f0f0f0;
+        overflow: hidden;
+      }
+      .img-container img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+      }
+
+      .p-name {
+        font-size: 0.75rem;
+        font-weight: 600;
+        color: var(--text-dark);
+        height: 2.6em;
+        overflow: hidden;
+        display: -webkit-box;
+        -webkit-line-clamp: 2;
+        -webkit-box-orient: vertical;
+        line-height: 1.3;
+      }
+      .p-price-row {
+        display: flex;
+        align-items: center;
+        gap: 5px;
+      }
+      .p-price {
+        font-weight: 700;
+        font-size: 0.9rem;
+        color: var(--text-dark);
+      }
+      .p-old-price {
+        text-decoration: line-through;
+        color: var(--text-gray);
+        font-size: 0.7rem;
+        font-weight: 400;
+      }
+
+      .add-btn {
+        width: 100%;
+        padding: 10px;
+        border-radius: 6px;
+        border: 1px solid var(--primary-purple);
+        background: transparent;
+        color: var(--primary-purple);
+        font-weight: 700;
+        font-size: 0.75rem;
+        cursor: pointer;
+        transition: 0.2s;
+        margin-top: auto;
+      }
+
+      /* Modal */
+      #customModal {
+        position: fixed;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%) scale(0.9);
+        background: white;
+        padding: 24px;
+        border-radius: 16px;
+        z-index: 3000;
+        text-align: center;
+        box-shadow: 0 15px 50px rgba(0, 0, 0, 0.3);
+        display: none;
+        opacity: 0;
+        transition: 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        width: 85%;
+        max-width: 320px;
+      }
+      #customModal.show {
+        display: block;
+        opacity: 1;
+        transform: translate(-50%, -50%) scale(1);
+      }
+      #customModal p {
+        font-weight: 500;
+        color: var(--text-dark);
+        margin-bottom: 20px;
+      }
+      #customModal button {
+        background: var(--primary-purple);
+        color: white;
+        padding: 12px 25px;
+        border: none;
+        border-radius: 8px;
+        cursor: pointer;
+        width: 100%;
+        font-weight: 700;
+      }
+
+      /* Desktop Adjustments */
+      @media (min-width: 768px) {
+        :root {
+          --header-h: 70px;
+        }
+        header {
+          padding: 0 5%;
+          gap: 15px;
+        }
+        .logo {
+          font-size: 1.25rem;
+        }
+        .product-grid {
+          grid-template-columns: repeat(4, 1fr);
+          gap: 15px;
+        }
+        .slider-viewport {
+          aspect-ratio: 16/6;
+        }
+        .section-header h2 {
+          font-size: 1.5rem;
+        }
+        .search-container input {
+          font-size: 0.9rem;
+          padding: 10px 10px 10px 35px;
+        }
+        .login-btn {
+          padding: 8px 15px;
+          font-size: 0.85rem;
+        }
+        .filter-bar {
+          padding: 5px 5%;
+        }
+        .section-container {
+          padding: 20px 5% 40px;
+        }
+      }
+      @media (min-width: 1024px) {
+        .product-grid {
+          grid-template-columns: repeat(5, 1fr);
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <!-- HEADER (REUSED) -->
+    <header>
+      <div class="menu-btn" id="openSidebar">
+        <svg
+          width="22"
+          height="22"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2.5"
+        >
+          <line x1="3" y1="12" x2="21" y2="12"></line>
+          <line x1="3" y1="6" x2="21" y2="6"></line>
+          <line x1="3" y1="18" x2="21" y2="18"></line>
+        </svg>
+      </div>
+      <a href="index.html" class="logo">STACKLY</a>
+      <div class="search-container">
+        <svg
+          class="search-icon"
+          width="14"
+          height="14"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2.5"
+        >
+          <circle cx="11" cy="11" r="8"></circle>
+          <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+        </svg>
+        <input type="text" placeholder="Search kids toys, diapers..." />
+      </div>
+      <div class="header-icons">
+        <button
+          class="login-btn"
+          onclick="showModal('Account features coming soon!')"
+        >
+          Login
+        </button>
+        <div class="icon-box" id="openCart">
+          <svg
+            width="22"
+            height="22"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2.5"
+          >
+            <circle cx="9" cy="21" r="1"></circle>
+            <circle cx="20" cy="21" r="1"></circle>
+            <path
+              d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"
+            ></path>
+          </svg>
+          <span class="cart-badge" id="cartCount">0</span>
+        </div>
+      </div>
+    </header>
+
+    <div class="drawer-overlay" id="overlay"></div>
+
+    <!-- SIDEBAR DRAWER (REUSED) -->
+    <div id="sidebar" class="drawer">
+      <div class="drawer-header">
+        <h3
+          style="
+            color: var(--primary-purple);
+            font-weight: 800;
+            font-size: 1rem;
+          "
+        >
+          STACKLY MENU
+        </h3>
+        <span
+          id="closeSidebar"
+          style="cursor: pointer; font-size: 1.2rem; font-weight: 700"
+          >✕</span
+        >
+      </div>
+      <div class="drawer-content">
+        <p
+          style="
+            margin-bottom: 10px;
+            font-size: 0.75rem;
+            font-weight: 700;
+            color: #bbb;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+          "
+        >
+          Categories
+        </p>
+        <div style="padding: 14px 0; border-bottom: 1px solid #f0f0f0">
+          <a
+            href="./index.html"
+            style="
+              text-decoration: none;
+              color: inherit;
+              font-weight: 500;
+              display: block;
+            "
+            >HOME</a
+          >
+        </div>
+        <div style="padding: 14px 0; border-bottom: 1px solid #f0f0f0">
+          <a
+            href="./electronics.html"
+            style="
+              text-decoration: none;
+              color: inherit;
+              font-weight: 500;
+              display: block;
+            "
+            >ELECTRONICS</a
+          >
+        </div>
+        <div style="padding: 14px 0; border-bottom: 1px solid #f0f0f0">
+          <a
+            href="./kids.html"
+            style="
+              text-decoration: none;
+              color: inherit;
+              font-weight: 500;
+              display: block;
+            "
+            >KIDS</a
+          >
+        </div>
+        <div style="padding: 14px 0; border-bottom: 1px solid #f0f0f0">
+          <a
+            href="./fashion.html"
+            style="
+              text-decoration: none;
+              color: inherit;
+              font-weight: 500;
+              display: block;
+            "
+            >FASHION</a
+          >
+        </div>
+        <div style="padding: 14px 0; border-bottom: 1px solid #f0f0f0">
+          <a
+            href="./homeliving.html"
+            style="
+              text-decoration: none;
+              color: inherit;
+              font-weight: 500;
+              display: block;
+            "
+            >HOME-LIVING</a
+          >
+        </div>
+      </div>
+    </div>
+
+    <!-- CART DRAWER (REUSED) -->
+    <div id="cartDrawer" class="drawer">
+      <div class="drawer-header">
+        <h3 style="font-weight: 800; font-size: 1rem">YOUR CART</h3>
+        <span
+          id="closeCart"
+          style="cursor: pointer; font-size: 1.2rem; font-weight: 700"
+          >✕</span
+        >
+      </div>
+      <div class="drawer-content" id="cartItemsList"></div>
+      <div class="drawer-footer">
+        <div class="total-row">
+          <span>Subtotal:</span>
+          <span id="cartTotal">₹0</span>
+        </div>
+        <button class="checkout-btn" onclick="checkout()">Checkout Now</button>
+      </div>
+    </div>
+
+    <!-- MODAL (REUSED) -->
+    <div id="customModal">
+      <p id="modalText"></p>
+      <button onclick="hideModal()">Close</button>
+    </div>
+
+    <!-- FILTER BAR (UPDATED FOR KIDS) -->
+    <div class="filter-bar no-scrollbar" id="categoryChips"></div>
+
+    <!-- HERO SLIDER (UPDATED FOR KIDS) -->
+    <section class="hero-section">
+      <div class="slider-viewport">
+        <div class="slider-track" id="sliderTrack"></div>
+      </div>
+    </section>
+
+    <!-- PRODUCT GRID (UPDATED FOR KIDS) -->
+    <main id="mainContent"></main>
+    <!-- START REUSABLE FOOTER -->
+    <footer class="stk-footer pt-16 pb-8">
+      <div class="max-w-7xl mx-auto px-6">
+        <!-- Main Grid Section -->
+        <div class="stk-footer-grid mb-12">
+          <!-- BRAND SECTION -->
+          <div class="stk-brand flex flex-col gap-6">
+            <img
+              src="./assets/logo.webp"
+              alt="NexStore Logo"
+              class="stk-logo"
+              onerror="
+                this.src =
+                  'https://placehold.co/150x50/5f259f/ffffff?text=Stackly'
+              "
+              onclick="window.location.href = './index.html'"
+            />
+            <p class="stk-brand-text text-sm leading-relaxed text-gray-500">
+              Premium quality electronics, fashion, and home essentials
+              delivered to your doorstep. Join millions of happy shoppers.
+            </p>
+            <div class="flex flex-col gap-3">
+              <div class="stk-trust-badge">
+                <i class="fas fa-lock"></i> Secure 256-bit SSL Payments
+              </div>
+              <div class="stk-trust-badge">
+                <i class="fas fa-bolt"></i> Express Worldwide Delivery
+              </div>
+              <div class="stk-trust-badge">
+                <i class="fas fa-sync-alt"></i> 30-Day Hassle-Free Returns
+              </div>
+            </div>
+          </div>
+
+          <!-- QUICK LINKS -->
+          <div class="stk-links">
+            <h4
+              class="stk-links-title font-bold text-sm uppercase tracking-widest mb-6 text-gray-900"
+            >
+              Shop Categories
+            </h4>
+            <ul class="flex flex-col gap-4">
+              <li><a href="./index.html" class="stk-footer-link">HOME</a></li>
+              <li>
+                <a href="./electronics.html" class="stk-footer-link"
+                  >ELECTRONICS</a
+                >
+              </li>
+              <li>
+                <a href="./fashion.html" class="stk-footer-link">FASHION</a>
+              </li>
+              <li>
+                <a href="./homeliving.html" class="stk-footer-link"
+                  >HOME-LIVING</a
+                >
+              </li>
+
+              <li>
+                <a href="./kids.html" class="stk-footer-link">KIDS & BABY</a>
+              </li>
+            </ul>
+          </div>
+
+          <!-- SUPPORT -->
+          <div class="stk-support">
+            <h4
+              class="stk-links-title font-bold text-sm uppercase tracking-widest mb-6 text-gray-900"
+            >
+              Customer Help
+            </h4>
+            <ul class="flex flex-col gap-4">
+              <li>
+                <a href="./404.html" class="stk-footer-link"
+                  >Track Your Order</a
+                >
+              </li>
+              <li>
+                <a href="./404.html" class="stk-footer-link">Shipping Rates</a>
+              </li>
+              <li>
+                <a href="./404.html" class="stk-footer-link">Return Policy</a>
+              </li>
+              <li><a href="./404.html" class="stk-footer-link">FAQs</a></li>
+              <li>
+                <a href="./404.html" class="stk-footer-link">Terms & Privacy</a>
+              </li>
+            </ul>
+          </div>
+
+          <!-- CONTACT -->
+          <div class="stk-contact">
+            <h4
+              class="stk-links-title font-bold text-sm uppercase tracking-widest mb-6 text-gray-900"
+            >
+              Get In Touch
+            </h4>
+            <ul class="flex flex-col gap-5 text-sm">
+              <li class="stk-contact-item flex gap-3 text-gray-500">
+                <i class="fas fa-map-marker-alt mt-1 text-purple-700"></i>
+                <span>101 Silicon Avenue,<br />Innovation Park, CA 94025</span>
+              </li>
+              <li class="stk-contact-item flex gap-3 text-gray-500">
+                <i class="fas fa-phone-alt text-purple-700"></i>
+                <a href="tel:+15550001234" class="hover:text-purple-700"
+                  >+1 (555) 000-1234</a
+                >
+              </li>
+              <li class="stk-contact-item flex gap-3 text-gray-500">
+                <i class="fas fa-envelope text-purple-700"></i>
+                <a
+                  href="mailto:hello@nexstore.com"
+                  class="hover:text-purple-700"
+                  >hello@nexstore.com</a
+                >
+              </li>
+            </ul>
+          </div>
+
+          <!-- NEWSLETTER -->
+          <div class="stk-newsletter flex flex-col gap-6">
+            <h4
+              class="stk-links-title font-bold text-sm uppercase tracking-widest text-gray-900"
+            >
+              Newsletter
+            </h4>
+            <p class="text-xs text-gray-500">
+              Get the latest trends and exclusive coupons straight to your
+              inbox.
+            </p>
+            <form class="flex flex-col gap-2 lg:flex-row" action="./404.html">
+              <input
+                type="email"
+                placeholder="Your email address"
+                class="stk-newsletter-input"
+                required
+              />
+              <button class="stk-newsletter-btn">Join</button>
+            </form>
+            <div>
+              <p
+                class="text-[10px] text-gray-400 uppercase font-bold tracking-tighter mb-4"
+              >
+                Connect With Us
+              </p>
+              <div class="stk-social-row flex gap-3">
+                <a href="./404.html" class="stk-social-icon"
+                  ><i class="fab fa-facebook-f"></i
+                ></a>
+                <a href="./404.html" class="stk-social-icon"
+                  ><i class="fab fa-instagram"></i
+                ></a>
+                <a href="./404.html" class="stk-social-icon"
+                  ><i class="fab fa-twitter"></i
+                ></a>
+                <a href="./404.html" class="stk-social-icon"
+                  ><i class="fab fa-linkedin-in"></i
+                ></a>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Bottom Bar -->
+        <div class="stk-footer-bottom pt-8 border-t border-gray-100">
+          <div
+            class="flex flex-col md:flex-row justify-between items-center gap-6"
+          >
+            <p class="stk-footer-copy text-xs text-gray-400">
+              &copy; 2024 NexStore Retail. All Rights Reserved. Built with
+              Stackly Components.
+            </p>
+            <div
+              class="stk-payment-icons flex items-center gap-4 text-2xl text-gray-300"
+            >
+              <i class="fab fa-cc-visa"></i>
+              <i class="fab fa-cc-mastercard"></i>
+              <i class="fab fa-cc-paypal"></i>
+              <i class="fab fa-cc-apple-pay"></i>
+            </div>
+          </div>
+        </div>
+      </div>
+    </footer>
+    <script>
+      // --- KIDS & BABY DATA ---
+      const productsData = {
+        kids_baby: [
+          // TOYS
+          {
+            id: "k1",
+            name: "Remote Controlled Fast Racer Car",
+            price: 1499,
+            oldPrice: 2499,
+            category: "Toys",
+            tag: "POPULAR",
+            tagClass: "",
+            img: "./assets/k1.webp",
+          },
+          {
+            id: "k2",
+            name: "Interactive Talking Doll with Accessories",
+            price: 899,
+            oldPrice: 1299,
+            category: "Toys",
+            tag: "SALE",
+            tagClass: "sale-badge",
+            img: "./assets/k2.webp",
+          },
+          {
+            id: "k3",
+            name: "Classic Wooden Building Blocks Set",
+            price: 749,
+            oldPrice: 999,
+            category: "Toys",
+            tag: "",
+            tagClass: "",
+            img: "./assets/k3.webp",
+          },
+          {
+            id: "k4",
+            name: "3D Animal Puzzle Educational Game",
+            price: 349,
+            oldPrice: 599,
+            category: "Toys",
+            tag: "NEW",
+            tagClass: "festive-badge",
+            img: "./assets/k4.webp",
+          },
+          {
+            id: "k5",
+            name: "Remote Control Flying Drone Toy",
+            price: 2999,
+            oldPrice: 4500,
+            category: "Toys",
+            tag: "BEST SELLER",
+            tagClass: "",
+            img: "./assets/k5.webp",
+          },
+
+          // BABY CARE
+          {
+            id: "k6",
+            name: "Ultra Soft Baby Diapers - 72 Pack",
+            price: 999,
+            oldPrice: 1299,
+            category: "Diapers",
+            tag: "ESSENTIAL",
+            tagClass: "",
+            img: "./assets/k6.webp",
+          },
+          {
+            id: "k7",
+            name: "Gentle Baby Lotion - 500ml",
+            price: 449,
+            oldPrice: 550,
+            category: "Baby Care",
+            tag: "",
+            tagClass: "",
+            img: "./assets/k7.webp",
+          },
+          {
+            id: "k8",
+            name: "No-Tears Baby Shampoo with Milk",
+            price: 325,
+            oldPrice: 400,
+            category: "Baby Care",
+            tag: "",
+            tagClass: "",
+            img: "./assets/k8.webp",
+          },
+          {
+            id: "k9",
+            name: "Talc-Free Baby Powder - 200g",
+            price: 199,
+            oldPrice: 250,
+            category: "Baby Care",
+            tag: "",
+            tagClass: "",
+            img: "./assets/k9.webp",
+          },
+          {
+            id: "k10",
+            name: "Alcohol-Free Baby Wipes - 80pcs",
+            price: 149,
+            oldPrice: 199,
+            category: "Baby Care",
+            tag: "VALUE",
+            tagClass: "sale-badge",
+            img: "./assets/k10.webp",
+          },
+
+          // KIDS FASHION
+          {
+            id: "k11",
+            name: "Cotton Party Dress for Girls",
+            price: 1299,
+            oldPrice: 1999,
+            category: "Kids Fashion",
+            tag: "STYLISH",
+            tagClass: "",
+            img: "./assets/k11.webp",
+          },
+          {
+            id: "k12",
+            name: "Graphic Cotton T-Shirts Pack of 3",
+            price: 899,
+            oldPrice: 1499,
+            category: "Kids Fashion",
+            tag: "COMFORT",
+            tagClass: "",
+            img: "./assets/k12.webp",
+          },
+          {
+            id: "k13",
+            name: "Baby Boy Tuxedo Style Suit",
+            price: 1599,
+            oldPrice: 2299,
+            category: "Kids Fashion",
+            tag: "PREMIUM",
+            tagClass: "festive-badge",
+            img: "./assets/k13.webp",
+          },
+          {
+            id: "k14",
+            name: "Full School Uniform Set - Primary",
+            price: 1100,
+            oldPrice: 1500,
+            category: "School Items",
+            tag: "BACK TO SCHOOL",
+            tagClass: "",
+            img: "./assets/k14.webp",
+          },
+
+          // LEARNING
+          {
+            id: "k15",
+            name: "Alphabet & Numbers Flash Card Set",
+            price: 299,
+            oldPrice: 499,
+            category: "Learning",
+            tag: "",
+            tagClass: "",
+            img: "./assets/k15.webp",
+          },
+          {
+            id: "k16",
+            name: "Magnetic Writing & Drawing Board",
+            price: 549,
+            oldPrice: 799,
+            category: "Learning",
+            tag: "BEST SELLER",
+            tagClass: "",
+            img: "./assets/k16.webp",
+          },
+          {
+            id: "k17",
+            name: "Early Learning Tablet with Sound",
+            price: 1899,
+            oldPrice: 2499,
+            category: "Learning",
+            tag: "HOT",
+            tagClass: "festive-badge",
+            img: "./assets/k17.webp",
+          },
+          {
+            id: "k18",
+            name: "Dough Art Activity Kit for Kids",
+            price: 499,
+            oldPrice: 650,
+            category: "Learning",
+            tag: "",
+            tagClass: "",
+            img: "./assets/k18.webp",
+          },
+
+          // BABY GEAR
+          {
+            id: "k19",
+            name: "Lightweight Foldable Baby Stroller",
+            price: 4499,
+            oldPrice: 6500,
+            category: "Baby Gear",
+            tag: "TOP RATED",
+            tagClass: "",
+            img: "./assets/k19.webp",
+          },
+          {
+            id: "k20",
+            name: "Portable Baby Bed with Netting",
+            price: 1200,
+            oldPrice: 1800,
+            category: "Baby Gear",
+            tag: "",
+            tagClass: "",
+            img: "./assets/k20.webp",
+          },
+          {
+            id: "k21",
+            name: "Adjustable Baby Feeding Chair",
+            price: 2899,
+            oldPrice: 3500,
+            category: "Feeding",
+            tag: "SAFE",
+            tagClass: "",
+            img: "./assets/k21.webp",
+          },
+          {
+            id: "k22",
+            name: "Interactive Musical Baby Walker",
+            price: 2199,
+            oldPrice: 2999,
+            category: "Baby Gear",
+            tag: "SALE",
+            tagClass: "sale-badge",
+            img: "./assets/k22.webp",
+          },
+
+          // OTHERS
+          {
+            id: "k23",
+            name: "Jumbo Sized Teddy Bear Soft Toy",
+            price: 1299,
+            oldPrice: 1800,
+            category: "Soft Toys",
+            tag: "GIFT",
+            tagClass: "festive-badge",
+            img: "./assets/k23.webp",
+          },
+          {
+            id: "k24",
+            name: "Outdoor Slide and Play Gym",
+            price: 8500,
+            oldPrice: 12000,
+            category: "Outdoor Toys",
+            tag: "BIG SAVINGS",
+            tagClass: "sale-badge",
+            img: "./assets/k24.webp",
+          },
+        ],
+      };
+
+      const cart = [];
+      let currentFilter = "All";
+
+      window.onload = () => {
+        renderChips();
+        initSlider();
+        renderProducts();
+        setupEvents();
+      };
+
+      function renderChips() {
+        const chips = [
+          "All",
+          "Toys",
+          "Baby Care",
+          "Kids Fashion",
+          "School Items",
+          "Learning",
+          "Baby Gear",
+          "Diapers",
+          "Feeding",
+          "Soft Toys",
+          "Outdoor Toys",
+        ];
+        const container = document.getElementById("categoryChips");
+        container.innerHTML = "";
+        chips.forEach((c) => {
+          const chip = document.createElement("div");
+          chip.className = `chip ${c === currentFilter ? "active" : ""}`;
+          chip.innerText = c;
+          chip.onclick = () => {
+            currentFilter = c;
+            renderChips();
+            renderProducts();
+          };
+          container.appendChild(chip);
+        });
+      }
+
+      function initSlider() {
+        const track = document.getElementById("sliderTrack");
+        const slides = [
+          {
+            img: "./assets/kh1.webp",
+            title: "KIDS CARNIVAL",
+            sub: "Toys up to 50% Off",
+          },
+          {
+            img: "./assets/kh2.webp",
+            title: "BABY ESSENTIALS",
+            sub: "Gentle Care for your Little Ones",
+          },
+          {
+            img: "./assets/kh3.webp",
+            title: "FASHION FIESTA",
+            sub: "New Season Trends for Kids",
+          },
+          {
+            img: "./assets/kh4.webp",
+            title: "LEARN & PLAY",
+            sub: "Educational Kits & Activity sets",
+          },
+        ];
+        slides.forEach((s) => {
+          const div = document.createElement("div");
+          div.className = "slide";
+          div.style.backgroundImage = `url(${s.img})`;
+
+          // Visual fallback for missing images
+          const testImg = new Image();
+          testImg.src = s.img;
+          testImg.onerror = () => {
+            div.style.background = "linear-gradient(135deg, #ff9a9e, #fad0c4)";
+          };
+
+          div.innerHTML = `
+            <div class="slide-content">
+              <h1 style="font-size: clamp(1.2rem, 5vw, 2.5rem); margin-bottom: 2px; font-weight:900; text-shadow: 2px 2px 4px rgba(0,0,0,0.2);">${s.title}</h1>
+              <p style="opacity:0.9; font-size: 0.85rem; font-weight: 500;">${s.sub}</p>
+            </div>
+          `;
+          track.appendChild(div);
+        });
+
+        let idx = 0;
+        setInterval(() => {
+          idx = (idx + 1) % slides.length;
+          track.style.transform = `translateX(-${idx * 100}%)`;
+        }, 1500); // Requested 1.5 seconds
+      }
+
+      function renderProducts() {
+        const container = document.getElementById("mainContent");
+        const data = productsData.kids_baby;
+        const filtered =
+          currentFilter === "All"
+            ? data
+            : data.filter((p) => p.category === currentFilter);
+
+        container.innerHTML = `
+          <section class="section-container">
+            <div class="section-header">
+              <h2>${currentFilter === "All" ? "Kids & Baby Essentials" : currentFilter}</h2>
+            </div>
+            <div class="product-grid">
+              ${filtered
+                .map(
+                  (p) => `
+                <div class="product-card">
+                  ${p.tag ? `<div class="promo-badge ${p.tagClass}">${p.tag}</div>` : ""}
+                  <div class="img-container">
+                    <img src="${p.img}" alt="${p.name}" onerror="this.src='https://picsum.photos/seed/${p.id}/300/300'">
+                  </div>
+                  <div class="p-name">${p.name}</div>
+                  <div class="p-price-row">
+                    <span class="p-price">₹${p.price.toLocaleString()}</span>
+                    ${p.oldPrice ? `<span class="p-old-price">₹${p.oldPrice.toLocaleString()}</span>` : ""}
+                  </div>
+                  <button class="add-btn" onclick="addToCart('${p.id}', event)">Add to Cart</button>
+                </div>
+              `,
+                )
+                .join("")}
+            </div>
+            ${filtered.length === 0 ? '<div style="text-align:center; padding:50px; color:#999;">No products found in this category.</div>' : ""}
+          </section>
+        `;
+      }
+
+      function addToCart(id, event) {
+        event.stopPropagation();
+        const p = productsData.kids_baby.find((x) => x.id === id);
+        const item = cart.find((x) => x.id === id);
+        if (item) item.qty++;
+        else cart.push({ ...p, qty: 1 });
+
+        updateCartUI();
+        const btn = event.target;
+        const originalText = btn.innerText;
+        btn.innerText = "Added ✓";
+        btn.style.backgroundColor = "#00c853";
+        btn.style.borderColor = "#00c853";
+        btn.style.color = "white";
+        setTimeout(() => {
+          btn.innerText = originalText;
+          btn.style.backgroundColor = "";
+          btn.style.borderColor = "";
+          btn.style.color = "";
+        }, 1000);
+      }
+
+      function updateCartUI() {
+        const list = document.getElementById("cartItemsList");
+        const totalLabel = document.getElementById("cartTotal");
+        const countBadge = document.getElementById("cartCount");
+
+        list.innerHTML = "";
+        let total = 0,
+          items = 0;
+
+        cart.forEach((item) => {
+          total += item.price * item.qty;
+          items += item.qty;
+          const div = document.createElement("div");
+          div.className = "cart-item";
+          div.innerHTML = `
+            <img src="${item.img}" onerror="this.src='https://picsum.photos/seed/${item.id}/100/100'">
+            <div class="cart-item-info">
+              <h4>${item.name}</h4>
+              <p>₹${item.price.toLocaleString()} x ${item.qty}</p>
+            </div>
+          `;
+          list.appendChild(div);
+        });
+
+        countBadge.innerText = items;
+        totalLabel.innerText = `₹${total.toLocaleString()}`;
+        if (cart.length === 0)
+          list.innerHTML =
+            '<div style="text-align:center; padding:40px 20px;"><p style="color:#999; font-weight:500;">Your cart is empty</p></div>';
+      }
+
+      function setupEvents() {
+        const overlay = document.getElementById("overlay");
+        document.getElementById("openSidebar").onclick = () => {
+          document.getElementById("sidebar").classList.add("active");
+          overlay.style.display = "block";
+          document.body.style.overflow = "hidden";
+        };
+        document.getElementById("openCart").onclick = () => {
+          document.getElementById("cartDrawer").classList.add("active");
+          overlay.style.display = "block";
+          document.body.style.overflow = "hidden";
+        };
+        document.getElementById("closeSidebar").onclick = closeAll;
+        document.getElementById("closeCart").onclick = closeAll;
+        overlay.onclick = closeAll;
+      }
+
+      function closeAll() {
+        document
+          .querySelectorAll(".drawer")
+          .forEach((d) => d.classList.remove("active"));
+        overlay.style.display = "none";
+        document.body.style.overflow = "";
+        hideModal();
+      }
+
+      function showModal(t) {
+        document.getElementById("modalText").innerText = t;
+        document.getElementById("customModal").classList.add("show");
+        overlay.style.display = "block";
+      }
+
+      function hideModal() {
+        document.getElementById("customModal").classList.remove("show");
+        if (!document.querySelector(".drawer.active"))
+          overlay.style.display = "none";
+      }
+
+      function checkout() {
+        if (cart.length === 0) return showModal("Cart is empty!");
+        showModal(
+          "Order placed successfully! Thank you for choosing NexStore Kids.",
+        );
+        cart.length = 0;
+        updateCartUI();
+      }
+    </script>
+  </body>
+</html>
